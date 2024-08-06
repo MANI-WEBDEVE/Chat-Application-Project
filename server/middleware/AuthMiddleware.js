@@ -8,12 +8,11 @@ export const verifyToken = (request, response, next) => {
   }
 
   jwt.verify(token, process.env.JWT_KEY, async (err, payload) => {
-    console.log(payload.user)
     if (err) {
       console.log("JWT verification error:", err.message);
       return response.status(403).send("JWT Token is not valid");
     }
-
+    // console.log(payload)
     request.userId = payload.user;
     next();
   });

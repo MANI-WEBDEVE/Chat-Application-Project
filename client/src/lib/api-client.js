@@ -3,7 +3,8 @@ import { HOST } from "../utils/constant.js"
 
 const apiClient = axios.create(
     {
-        baseURL: HOST
+        baseURL: HOST,
+        withCredentials:true
     }
 )
 

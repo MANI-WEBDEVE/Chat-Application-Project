@@ -59,7 +59,7 @@ export const login = async (request, response, next) => {
         secure:true,
         sameSite:"None"
     })
-    console.log(user)
+    // console.log(user)
     return response.status(200).json({
         user:{
             id: user.id,
@@ -80,11 +80,37 @@ export const login = async (request, response, next) => {
  
 export const getUserInfo = async (req,res) => {
   try {
-    console.log(res.userId)
     const userData = await User.findById(req.userId)  ;
     if (!userData) {
       return res.status(404).send("User with the given id not found");
     }
+    return res.status(200).json({
+     
+        id: userData.id,
+        email: userData.email,
+        profileSetup: userData.profileSetup,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        image: userData.image,
+        color: userData.color
+      
+    });
+
+  } catch (error) {
+    console.log(error)
+  }
+}
+export const updateProfile = async (req,res) => {
+  try {
+    const {userId} = req;
+    const {firstName, lastName, image, color} = req.body;
+    
+    if (!firstName || !lastName ) {
+      return res.status(404).send("Firt name and last name are required");
+    }
+    const userData = await User.findByIdAndUpdate(userId, {firstName, lastName, image, color, profileSetup: true}, {new: true, runValidators:true})  ;
+
+
     return res.status(200).json({
      
         id: userData.id,

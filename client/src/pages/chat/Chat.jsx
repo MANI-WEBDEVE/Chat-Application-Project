@@ -14,7 +14,9 @@ const Chat = () => {
   }, [userInfo,navigate])
 
 
-  return <div></div>;
+  return <div>
+    <h1>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatem impedit nisi eligendi dicta amet a porro consectetur blanditiis totam, quae, deleniti atque tenetur.</h1>
+  </div>;
 };
 
 export default Chat;
