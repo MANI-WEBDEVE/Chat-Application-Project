@@ -31,7 +31,6 @@ app.listen(port, ()=> {
     console.log(`Server is running on port ${port}`)
 })
 
-mongoose.connect(dataBaseUri, {
-})
+mongoose.connect(dataBaseUri, {})
 .then(()=> console.log('MongoDb connected'))
 .catch(err => console.log(err))
