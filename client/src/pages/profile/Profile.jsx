@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import apiClient from "@/lib/api-client";
-import { UPDATE_PROFILE_IMAGE, UPDATE_PROFILE_ROUTE } from "@/utils/constant";
+import { DELETED_PROFILE_IMAGE, HOST, UPDATE_PROFILE_IMAGE, UPDATE_PROFILE_ROUTE } from "@/utils/constant";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -21,11 +21,17 @@ const Profile = () => {
   const [selectColor, setSelectColor] = useState(0);
   const fileInputRef = useRef(null);
 
+
+
+  
   useEffect(() => {
     if (userInfo.profileSetup) {
       setFirstName(userInfo.firstName);
       setLastName(userInfo.lastName);
       setSelectColor(userInfo.selectColor);
+    }
+    if (userInfo.image){
+      setImage(`${HOST}/${userInfo.image}`)
     }
   }, [userInfo]);
 
@@ -70,24 +76,76 @@ const Profile = () => {
     fileInputRef.current.click();
   };
 
+  // const handleImageChange = async (event) => {
+  //   console.log('hello')
+  //   const file = event.target.files[0];
+  //   console.log({file})
+  //   if (file) {
+  //     const formData = new FormData();
+  //     console.log(...formData.entries());
+  //     console.log(...formData)
+  //     const form = formData.append('profile-image', file)
+      
+  //     const response = await apiClient.post(UPDATE_PROFILE_IMAGE, form, {withCredentials:true})
+  //     console.log(response)
+
+  //     if (response.status === 200 && response.data.image) {
+  //       setUserInfo({...userInfo, image:response.data.image});
+  //       toast.success("Image Uplaod Successfully ✨")
+  //     } 
+  //   }
+
+  // };
+
   const handleImageChange = async (event) => {
+    console.log('hello');
     const file = event.target.files[0];
-    console.log([file])
+    console.log({ file });
+
     if (file) {
       const formData = new FormData();
-      formData.append("profile-image", file)
-      console.log(formData)
-      const response = await apiClient.post(UPDATE_PROFILE_IMAGE, formData, {withCredentials:true})
+      formData.append('profile-image', file); // Append file to FormData
 
-      if (response.status === 200 && response.data.image) {
-        setUserInfo({...userInfo, image:response.data.image});
-        toast.success("Image Uplaod Successfully ✨")
-      } 
+      // Debugging: Log the FormData entries
+      for (let pair of formData.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+      }
+
+      try {
+        const response = await apiClient.post(UPDATE_PROFILE_IMAGE, formData, { withCredentials: true });
+        console.log(response);
+
+        if (response.status === 200 && response.data.image) {
+          setUserInfo({ ...userInfo, image: response.data.image });
+          toast.success("Image Uploaded Successfully ✨");
+        } 
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        toast.error("Failed to upload image 😢");
+      }
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+  const handleDeleteImage = async () => {
+    const response = await apiClient.delete(DELETED_PROFILE_IMAGE, {withCredentials:true});
+
+    if (response.status === 200){
+      setUserInfo({...userInfo, image:null})
+      toast.success("Image Deleted Successfully")
+      setImage(null)
     }
 
   };
-
-  const handleDeleteImage = () => {};
 
   return (
     <div className="bg-[#1b1c24] h-[100vh] flex justify-center items-center gap-10">
@@ -105,7 +163,7 @@ const Profile = () => {
               className="w-32 h-32 md:w-48
              md:h-48 overflow-hidden rounded-s-full"
             >
-              {image ? (
+              { image ? (
                 <AvatarImage
                   src={image}
                   alt="profile"
@@ -126,13 +184,8 @@ const Profile = () => {
             {hovered && (
               <div
                 onClick={image ? handleDeleteImage : handleFileInputClick}
-                className="absolute lg:inset-0 sm:inset-10 
-              
-              md:inset-0 min-[342px]:inset-x-1 max-[613px]:inset-y-7 
-              min-[614px]:inset-x-1 max-[766px]:inset-y-7
-              min-[640px]:inset-x-1 max-[690px]:inset-y-7 
-              min-[710px]:inset-x-1 max-[770px]:inset-y-9 
-               
+                className="absolute inset-x-0 inset-y-14 md:inset-y-6
+                md:inset-x-0 lg:inset-x-0 lg:inset-y-5
               flex items-center justify-center bg-black/50 rounded-full"
               >
                 {image ? (

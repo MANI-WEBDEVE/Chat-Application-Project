@@ -18,8 +18,11 @@ app.use(cors(
         origin:[process.env.ORIGIN, "*"],
         methods:['GET','POST','PUT','DELETE'],
         credentials: true
-    }
+    } 
 ))
+
+app.use("/uploads/profiles",express.static("uploads/profiles"))
+
 app.use(cookiePareser());
 app.use(express.json({limit:'1mb'}));
 
