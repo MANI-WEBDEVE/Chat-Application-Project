@@ -27,7 +27,7 @@ function App() {
   const gateUserInfo = async () => {
     try {
       const response = await apiClient.get(GET_USER_INFO, {withCredentials:true});
-      if (response.status === 200 && response.data.Id) {
+      if (response.status === 200 && response.data.id) {
         setUserInfo(response.data)
       } else {
         setUserInfo(undefined)
@@ -48,7 +48,27 @@ function App() {
  }, [userInfo, setUserInfo])
 
  if (loading) {
-  return <div>Loading...</div>
+  return  <div className="flex items-center justify-center h-screen bg-gray-100">
+  <div className="flex flex-col items-center">
+    <div className="loader mb-4"></div>
+    <h2 className="text-lg font-semibold text-gray-700">Loading...</h2>
+  </div>
+  <style jsx>{`
+    .loader {
+      border: 8px solid #f3f3f3; /* Light grey */
+      border-top: 8px solid #3498db; /* Blue */
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  `}</style>
+</div>
  }
 
 

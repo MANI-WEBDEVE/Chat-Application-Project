@@ -9,6 +9,7 @@ import apiClient from "../../lib/api-client";
 import { LOGIN_ROUTE, SIGNUP_ROUTE } from "../../utils/constant";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useAppStore } from "@/store";
 // // import { LOGIN_ROUTE, SIGNUP_ROUTE } from "@/utils/constant";
 // // import { useNavigate } from "react-router-dom";
 // // import { useAppStore } from "@/store";
@@ -17,6 +18,7 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
+  const { setUserInfo } = useAppStore()
   const navigate = useNavigate();
 
   //* sign up validator
@@ -49,6 +51,7 @@ const Auth = () => {
       console.log({ response });
 
       if (response.status === 201) {
+        setUserInfo(response.data.user);
         toast.success("User created successfully");
         navigate("/profile");
       }
@@ -72,6 +75,7 @@ const Auth = () => {
     if (validatorLogin()) {
       const response = await apiClient.post(LOGIN_ROUTE, {email, password}, {withCredentials:true})
       if (response.data.user.id) {
+        setUserInfo(response.data.user)
         navigate("/profile");
       } else {
         navigate("/auth");

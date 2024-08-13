@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../../client"
+		},
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../server1"
+		}
+	]
+}

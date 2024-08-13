@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from "@/store";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { colors, getColors } from "@/lib/utils";
@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import apiClient from "@/lib/api-client";
-import { UPDATE_PROFILE_ROUTE } from "@/utils/constant";
+import { UPDATE_PROFILE_IMAGE, UPDATE_PROFILE_ROUTE } from "@/utils/constant";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -19,6 +19,7 @@ const Profile = () => {
   const [image, setImage] = useState(null);
   const [hovered, setHovered] = useState(false);
   const [selectColor, setSelectColor] = useState(0);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (userInfo.profileSetup) {
@@ -26,8 +27,7 @@ const Profile = () => {
       setLastName(userInfo.lastName);
       setSelectColor(userInfo.selectColor);
     }
-  }, [userInfo])
-
+  }, [userInfo]);
 
   const validateProfile = () => {
     if (!firstName) {
@@ -43,21 +43,56 @@ const Profile = () => {
 
   const saveChanges = async () => {
     if (validateProfile()) {
-      const response = await apiClient.post(UPDATE_PROFILE_ROUTE,{ firstName, lastName, color:selectColor },
-        {withCredentials:true}
+      const response = await apiClient.post(
+        UPDATE_PROFILE_ROUTE,
+        { firstName, lastName, color: selectColor },
+        { withCredentials: true }
       );
       if (response.status === 200 && response.data) {
-        setUserInfo({...response.data});
+        setUserInfo({ ...response.data });
         toast.success("Profile updated successfully");
-        navigate('/chat')
+        navigate("/chat");
       }
     }
   };
 
+  const handleNavigate = () => {
+    if (userInfo.profileSetup) {
+      navigate("/chat");
+      toast.success("profile Setup already");
+    } else {
+      toast.error("Please setup your PROFILE");
+    }
+  };
+
+  const handleFileInputClick = () => {
+    toast.message("Select Image here!");
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = async (event) => {
+    const file = event.target.files[0];
+    console.log([file])
+    if (file) {
+      const formData = new FormData();
+      formData.append("profile-image", file)
+      console.log(formData)
+      const response = await apiClient.post(UPDATE_PROFILE_IMAGE, formData, {withCredentials:true})
+
+      if (response.status === 200 && response.data.image) {
+        setUserInfo({...userInfo, image:response.data.image});
+        toast.success("Image Uplaod Successfully ✨")
+      } 
+    }
+
+  };
+
+  const handleDeleteImage = () => {};
+
   return (
     <div className="bg-[#1b1c24] h-[100vh] flex justify-center items-center gap-10">
       <div className="flex flex-col gap-10 w-[80vw] md:w-max">
-        <div>
+        <div onClick={handleNavigate}>
           <IoArrowBack className="text-white/90 text-4xl lg:text-6xl cursor-pointer " />
         </div>
         <div className="grid grid-cols-2">
@@ -90,6 +125,7 @@ const Profile = () => {
             </Avatar>
             {hovered && (
               <div
+                onClick={image ? handleDeleteImage : handleFileInputClick}
                 className="absolute lg:inset-0 sm:inset-10 
               
               md:inset-0 min-[342px]:inset-x-1 max-[613px]:inset-y-7 
@@ -106,6 +142,14 @@ const Profile = () => {
                 )}
               </div>
             )}
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="hidden"
+              onChange={handleImageChange}
+              name="profile-image"
+              accept=".png, .jpg, .jpeg, .svg, .webp"
+            />
           </div>
           <div className="flex min-x-32 md:min-w-64 flex-col gap-5 text-white items-center justify-center">
             <div className="w-full">
