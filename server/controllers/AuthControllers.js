@@ -172,3 +172,18 @@ export const removeProfileImage = async (req, res, next) => {
   }
 };
                                               
+
+export const logOutRoute = async(req, res, next) => {
+   try {
+        res.cookie("jwt", "", {
+        maxAge: 1,
+        secure: true,
+        sameSite: "None",
+      });    
+
+    return res.status(200).clearCookie("jwt").send("User logged out successfully");
+   } catch (error) {    
+    console.log(error);
+   }
+    
+}
