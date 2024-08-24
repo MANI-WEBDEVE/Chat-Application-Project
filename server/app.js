@@ -6,6 +6,8 @@ import cookiePareser from 'cookie-parser'
 import mongoose from "mongoose";
 // import authRoutes from "./routes/AuthRoutes ";
 import authRoutes from "./routes/AuthRoute.js"
+import contactsRoutes from "./routes/ContactRoute.js";
+import setupSocket from "./socketIo.js";
 
 dotenv.config()
 
@@ -27,12 +29,16 @@ app.use(cookiePareser());
 app.use(express.json({limit:'1mb'}));
 
 app.use('/api/auth', authRoutes);
+app.use("/api/contact", contactsRoutes)
 
 
 
-app.listen(port, ()=> {
+ const server =  app.listen(port, ()=> {
     console.log(`Server is running on port ${port}`)
 })
+
+setupSocket(server)
+
 
 mongoose.connect(dataBaseUri, {})
 .then(()=> console.log('MongoDb connected'))
