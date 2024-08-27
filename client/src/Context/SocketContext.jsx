@@ -26,6 +26,16 @@ export const SocketProvider = ({ children }) => {
                 console.log(`Connected to the socket server`);
             });
 
+            const handleRecieveMessage = (message) => {
+                const { selectedChatType, selectedChatData, addMessage } = useAppStore.getState()
+                if (selectedChatType !== undefined && (selectedChatData._id === message.sender._id || selectedChatData._id === message.recipient._id)){ 
+                    console.log({message})
+                    addMessage(message)
+                 }
+            }
+
+            socket.current.on("recieveMessage", handleRecieveMessage)
+
             // Clean up the socket connection when the component unmounts or userInfo changes
             return () => {
                 if (socket.current) {

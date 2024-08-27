@@ -24,7 +24,7 @@ const ChatHeader = () => {
                 />
               ) : (
                 <div
-                  className={`uppercase h-32 w-32 md:w-48 md:h-48 text-5xl border border-white flex justify-center items-center rounded-full ${getColors(
+                  className={`uppercase h-12 w-12 md:w-12 md:h-12 text-xl border border-white flex justify-center items-center rounded-full ${getColors(
                     selectedChatData.color
                   )}`}
                 >
