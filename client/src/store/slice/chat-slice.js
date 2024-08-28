@@ -8,7 +8,7 @@ export const createChatSlice = (set, get) => ({
   closeChat: () =>
     set({
       selectedChatData: undefined,
-      selectedChatType: undefined,
+      selectedChatType: undefined, 
       selectedChatMessage: [],
     }),
   addMessage: (message) => {
