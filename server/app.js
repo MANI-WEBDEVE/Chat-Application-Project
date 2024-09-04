@@ -8,11 +8,12 @@ import mongoose from "mongoose";
 import authRoutes from "./routes/AuthRoute.js"
 import contactsRoutes from "./routes/ContactRoute.js";
 import setupSocket from "./socketIo.js";
+import messageRoute from "./routes/MessagesRoute.js";
 
 dotenv.config()
 
 const app = express()
-const port = process.env.PORT || 4001 ;
+const port = process.env.PORT || 4000 ;
 const dataBaseUri = process.env.DATABASE_URI;
 
 app.use(cors(
@@ -30,6 +31,7 @@ app.use(express.json({limit:'1mb'}));
 
 app.use('/api/auth', authRoutes);
 app.use("/api/contact", contactsRoutes)
+app.use("/api/messages", messageRoute)
 
 
 

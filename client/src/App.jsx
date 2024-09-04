@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAppStore } from "./store";
 import apiClient from "./lib/api-client";
 import { GET_USER_INFO } from "./utils/constant";
-
 const PrivateRoute = ({ children }) => {
   const { userInfo } = useAppStore();
   const isAuthenticated = !!userInfo;

@@ -38,6 +38,7 @@ const MessageBar = () => {
         messageType: 'text',
         fileUrl: undefined
       })
+      setMessage("")
     }
   }
 

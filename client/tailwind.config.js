@@ -21,6 +21,7 @@ module.exports = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        scrollbarColor: ['dark'],
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
@@ -73,5 +74,10 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  variants: {
+    extend: {
+      scrollbar: ['dark'],
+    },
+  },
+  plugins: [require("tailwindcss-animate"), require('tailwind-scrollbar')],
 }
