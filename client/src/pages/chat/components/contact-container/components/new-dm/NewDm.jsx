@@ -19,9 +19,9 @@ import {
 } from "@/components/ui/dialog";
 import apiClient from "@/lib/api-client.js";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar"; 
 import { useAppStore } from "@/store";
-
+  
 function NewDm() {
   const {setSelectedChatType, setSelectedChatData} = useAppStore()
   const [openNewContactModel, setOpenNewContactModel] = useState(false);

@@ -1,7 +1,30 @@
+import { useEffect } from "react";
 import NewDm from "./components/new-dm/NewDm";
 import ProfileInfo from "./components/profileInfo/ProfileInfo";
+import { DM_CONTACT_LIST } from "@/utils/constant";
+import apiClient from "@/lib/api-client";
+import { useAppStore } from "@/store";
+import Contacts from "@/components/Contacts";
 
 const ContactContainer = () => {
+
+  const { directMessageContact, setDirectMessageContact } = useAppStore()
+
+
+  useEffect(() => {
+    const getContact = async () => {
+      const response = await apiClient.get(DM_CONTACT_LIST, {
+        withCredentials: true,
+      });
+      if (response.data.contacts) {
+       setDirectMessageContact(response.data.contacts);
+      } else {
+        console.log(response.data.message);
+      }
+    };
+    getContact();
+  }, [setDirectMessageContact]);
+
   return (
     <>
       <div className="relative md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-[#1b1c24] border-r-2 border-[#2f303b] w-full">
@@ -10,16 +33,19 @@ const ContactContainer = () => {
         </div>
         <div className="my-5">
           <div className="flex items-center justify-between pr-10">
-            <Title text="Directed Message"/>
-            <NewDm/>
+            <Title text="Directed Message" />
+            <NewDm />
+          </div>
+          <div className="max-h-[38vh] overscroll-y-auto scrollbar-hidden">
+            <Contacts contacts={directMessageContact}/>
           </div>
         </div>
         <div className="my-5">
           <div className="flex items-center justify-between pr-10">
-            <Title text="Channel"/>
+            <Title text="Channel" />
           </div>
         </div>
-        <ProfileInfo/>
+        <ProfileInfo />
       </div>
     </>
   );

@@ -4,12 +4,30 @@ import jwt from "jsonwebtoken";
 import fs, { unlinkSync } from "fs";
 
 const maxAge = 3 * 24 * 60 * 60 * 1000;
+/**
+ * Creates a JWT token for the given user.
+ * @param {string} email - The user's email.
+ * @param {ObjectId} user - The user's id.
+ * @returns {string} A JWT token with the user's email and id.
+ */
 const createToken = (email, user) => {
-  return jwt.sign({ email, user }, process.env.JWT_KEY, { expiresIn: maxAge });
+  console.log(`Generating JWT token for ${email}`);
+  console.log(`User ID: ${user}`);
+  const token = jwt.sign({ email, user }, process.env.JWT_KEY, { expiresIn: maxAge });
+  console.log(`Generated JWT token: ${token}`);
+  return token;
 };
 
 //* singup route handler
 
+/**
+ * Signup route handler
+ * @function signup
+ * @param {Object} request - The request object
+ * @param {Object} response - The response object
+ * @param {Function} next - The next middleware function
+ * @returns {Promise<void>}
+ */
 export const signup = async (request, response, next) => {
   try {
     const { email, password } = request.body;
@@ -17,6 +35,13 @@ export const signup = async (request, response, next) => {
       return response.status(400).send("Email and Password are required");
     }
     const user = await User.create({ email, password });
+    /**
+     * Set a cookie with the JWT token
+     * @param {string} jwt - The JWT token
+     * @param {number} maxAge - The maximum age of the cookie in milliseconds
+     * @param {boolean} secure - Whether the cookie should be set as secure
+     * @param {boolean} sameSite - Whether the cookie should be set as sameSite
+     */
     response.cookie("jwt", createToken(email, user.id), {
       maxAge,
       secure: true,

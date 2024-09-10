@@ -20,6 +20,7 @@ export const LOGOUT_ROUTE = `${AUTH_ROUTES}/logout-user`
 
 export const CONTACT_ROUTE = "/api/contact";
 export const  SEARCH_CONTACT_ROUTE = `${CONTACT_ROUTE}/search`;
+export const DM_CONTACT_LIST = `${CONTACT_ROUTE}/get-contact-dm-list`
 
 
 //? Get user and reciver messages Router;

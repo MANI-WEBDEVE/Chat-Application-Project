@@ -5,13 +5,14 @@ import { useEffect, useRef, useState } from "react";
 import { GrAttachment } from "react-icons/gr";
 import { IoSend } from "react-icons/io5";
 import { RiEmojiStickerLine } from "react-icons/ri";
+import { toast } from "sonner";
 
 const MessageBar = () => {
   const emojiRef = useRef();
-  const socket = useSocket()
+  const socket = useSocket();
   const [message, setMessage] = useState("");
-  const { selectedChatType, selectedChatData, userInfo } = useAppStore()
-  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false)
+  const { selectedChatType, selectedChatData, userInfo } = useAppStore();
+  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -22,25 +23,27 @@ const MessageBar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-    }
-  }, [emojiRef])
+    };
+  }, [emojiRef]);
 
   const handleEmoji = (emoji) => {
     setMessage((prev) => prev + emoji.emoji);
-  }
+  };
 
   const handleSendMessage = () => {
-    if (selectedChatType === "contact") {
+    if (message.length === 0) {
+      toast.error("Message cannot be empty");
+    } else if (selectedChatType === "contact") {
       socket.emit("sendMessage", {
         sender: userInfo.id,
         contact: message,
         recipient: selectedChatData._id,
-        messageType: 'text',
-        fileUrl: undefined
-      })
-      setMessage("")
+        messageType: "text",
+        fileUrl: undefined,
+      });
+      setMessage("");
     }
-  }
+  };
 
   return (
     <div className="h-[10vh] bg-[#1c1d25] flex justify-center items-center px-8  mb-6 gap-4">
@@ -53,27 +56,33 @@ const MessageBar = () => {
           onChange={(e) => setMessage(e.target.value)}
         />
         <div className="relative top-5 ">
-
-        <button className="text-neutral-500 duration-300 transition-all focus:border-none focus:outline-none focus:text-white">
-          <GrAttachment className="text-2xl" />
-        </button>
+          <button className="text-neutral-500 duration-300 transition-all focus:border-none focus:outline-none focus:text-white">
+            <GrAttachment className="text-2xl" />
+          </button>
         </div>
         <div className="relative  top-5 left-3">
-          <button className="text-neutral-500 duration-300 transition-all focus:border-none focus:outline-none focus:text-white " onClick={() => setEmojiPickerOpen(true)}>
+          <button
+            className="text-neutral-500 duration-300 transition-all focus:border-none focus:outline-none focus:text-white "
+            onClick={() => setEmojiPickerOpen(true)}
+          >
             <RiEmojiStickerLine className="text-2xl" />
           </button>
           <div className="absolute bottom-16 right-0" ref={emojiRef}>
-            <EmojiPicker theme="dark"
-            open={emojiPickerOpen}
-            onEmojiClick={handleEmoji}
-            autoFocusSearch={false}
+            <EmojiPicker
+              theme="dark"
+              open={emojiPickerOpen}
+              onEmojiClick={handleEmoji}
+              autoFocusSearch={false}
             />
           </div>
         </div>
       </div>
-      <button className=" bg-[#B417ff] rounded-[0.45rem] flex items-center justify-center p-5  duration-300  transition-all focus:bg-[#741bda] focus:border-none focus:outline-none focus:text-white hover:bg-[#741bda] " onClick={handleSendMessage}>
-          <IoSend className="text-2xl" />
-        </button>
+      <button
+        className=" bg-[#B417ff] rounded-[0.45rem] flex items-center justify-center p-5  duration-300  transition-all focus:bg-[#741bda] focus:border-none focus:outline-none focus:text-white hover:bg-[#741bda] "
+        onClick={handleSendMessage}
+      >
+        <IoSend className="text-2xl" />
+      </button>
     </div>
   );
 };

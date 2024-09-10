@@ -27,7 +27,9 @@ const setupSocket = (server) => {
     const recipientSocketId = userSocketMap.get(message.recipient);
     console.log(`recipientSocketId ${recipientSocketId}`)
     console.log(`senderSocketId ${senderSocketId}`)
-
+    if (message.length === 0) {
+      return console.log("Message is empty");
+    }
     const createMessage = await Message.create(message);
     console.log(`createMessage: ${createMessage}`) 
 
