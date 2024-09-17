@@ -1,12 +1,8 @@
 import Message from "../models/MessageModel.js";
 
-/**
- * Get all messages between two users
- * @param {Object} request - The request object
- * @param {Object} response - The response object
- * @param {Function} next - The next middleware function
- * @returns {Promise<void>}
- */
+import {mkdirSync, renameSync} from 'fs';
+
+
 export const getMessage = async (request, response, next) => {
   try {
     // Get the id of the two users
@@ -31,6 +27,26 @@ export const getMessage = async (request, response, next) => {
 
     // Return the messages in ascending order
     return response.status(200).json({messages});
+  } catch (error) {
+    console.log(`Somethin Internal Server Error: ${error.message}`);
+    return response.status(500).send("Internal Server Error")
+  }
+};
+export const uploadFiles = async (request, response, next) => {
+  try {
+    if(!request.file){
+      return response.status(400).send("File is required") 
+    }
+    const date = Date.now();
+    let fileDir = `uploads/files/${date}`;
+    let fileName = `${fileDir}/${request.file.originalname}`;
+
+    mkdirSync(fileDir, { recursive: true });
+    renameSync(request.file.path, fileName);
+    
+    return response.status(200).json({filePath: fileName})
+    
+   
   } catch (error) {
     console.log(`Somethin Internal Server Error: ${error.message}`);
     return response.status(500).send("Internal Server Error")

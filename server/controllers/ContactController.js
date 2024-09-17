@@ -43,7 +43,7 @@ export const getContactDMList = async (request, response, next) => {
   try {
     // Get the id of the user from the request
     let { userId } = request;
-    console.log("10000000000111111111111111111111111000000000000000000000000111111111111111111111111111110000000000000000000000000011111111111111");
+   
 
     // Convert the user id to a mongoose ObjectId
     userId = new mongoose.Types.ObjectId(userId);

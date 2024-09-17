@@ -26,3 +26,4 @@ export const DM_CONTACT_LIST = `${CONTACT_ROUTE}/get-contact-dm-list`
 //? Get user and reciver messages Router;
 export const MESSAGES_ROUTE = 'api/messages' 
 export const GET_ALL_MESSAGES =`${MESSAGES_ROUTE}/get-messages`
+export const UPLOADS_FILES_ROUTES =`${MESSAGES_ROUTE}/upload-file`

@@ -48,9 +48,7 @@ function Contacts({ contacts, isChannel = false }) {
                 />
               ) : (
                 <div
-                  className={`uppercase h-10 w-10 md:w-10 md:h-10 text-xl border border-white flex justify-center items-center rounded-full ${getColors(
-                    contact.color
-                  )}`}
+                  className={`${selectedChatData && selectedChatData._id === contact._id ? "bg-[#8147ff] hover:bg-[#8417ff] border border-slate-600" :getColors(contact.color)} uppercase h-10 w-10 md:w-10 md:h-10 text-xl border border-white flex justify-center items-center rounded-full `}
                 >
                   {contact.firstName
                     ? contact.firstName.split("").shift()
@@ -60,7 +58,7 @@ function Contacts({ contacts, isChannel = false }) {
             </Avatar>
             )
             } {contact.firstName}</div>
-            <span className="text-xs font-thin flex items-center ml-[40px] mb-4">{contact.email}</span>
+          
         </div>
       ))}
     </div>
