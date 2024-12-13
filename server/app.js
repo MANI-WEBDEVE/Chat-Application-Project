@@ -9,6 +9,7 @@ import authRoutes from "./routes/AuthRoute.js"
 import contactsRoutes from "./routes/ContactRoute.js";
 import setupSocket from "./socketIo.js";
 import messageRoute from "./routes/MessagesRoute.js";
+import channelRoutes from "./routes/ChannelRoute.js";
 
 dotenv.config()
 
@@ -33,7 +34,7 @@ app.use(express.json({limit:'1mb'}));
 app.use('/api/auth', authRoutes);
 app.use("/api/contact", contactsRoutes)
 app.use("/api/messages", messageRoute)
-
+app.use("/api/channel", channelRoutes)
 
 
  const server =  app.listen(port, ()=> {

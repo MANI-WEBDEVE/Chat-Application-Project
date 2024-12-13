@@ -21,9 +21,15 @@ export const LOGOUT_ROUTE = `${AUTH_ROUTES}/logout-user`
 export const CONTACT_ROUTE = "/api/contact";
 export const  SEARCH_CONTACT_ROUTE = `${CONTACT_ROUTE}/search`;
 export const DM_CONTACT_LIST = `${CONTACT_ROUTE}/get-contact-dm-list`
-
+export const GET_ALL_CONTACT_ROUTE = `${CONTACT_ROUTE}/get-all-contact`
 
 //? Get user and reciver messages Router;
 export const MESSAGES_ROUTE = 'api/messages' 
 export const GET_ALL_MESSAGES =`${MESSAGES_ROUTE}/get-messages`
 export const UPLOADS_FILES_ROUTES =`${MESSAGES_ROUTE}/upload-file`
+
+
+// Channel Routes
+
+export const CHANNEL_ROUTE = "api/channel";
+export const CREATE_CHANNEL_ROUTE = `${CHANNEL_ROUTE}/create-channel`;

@@ -3,7 +3,9 @@ export const createChatSlice = (set, get) => ({
   selectedChatData: undefined,
   selectedChatMessage: [],
   directMessageContact: [],
-
+  // channel slice
+  channels:[],
+  setChannels: (channels) => set({ channels }),
   // file upload and download states
   isUploading: false,
   isDownloading: false,
@@ -19,6 +21,7 @@ export const createChatSlice = (set, get) => ({
   setSelectedChatMessage: (selectedChatMessage) => set({ selectedChatMessage }),
 
 
+
   setDirectMessageContact: (directMessageContact) =>
     set({ directMessageContact }),
   // TODO: implement the code to add the new contact to the existing list
@@ -27,6 +30,12 @@ export const createChatSlice = (set, get) => ({
     const newContactList = [...directMessageContact, newContact];
     set({ directMessageContact: newContactList });
   },
+
+  addChannel: (channel) => {
+    const channels = get().channel;
+    set({channels:[channel,...channels]})
+  },
+
 
   closeChat: () =>
     set({

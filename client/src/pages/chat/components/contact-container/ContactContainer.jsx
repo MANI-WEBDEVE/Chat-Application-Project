@@ -3,12 +3,14 @@ import NewDm from "./components/new-dm/NewDm";
 import ProfileInfo from "./components/profileInfo/ProfileInfo";
 import { DM_CONTACT_LIST } from "@/utils/constant";
 import apiClient from "@/lib/api-client";
+// import CreateChannel from "@/pages/chat/components/contact-container/components/create-channel/createChannel";
 import { useAppStore } from "@/store";
 import Contacts from "@/components/Contacts";
+import CreateChannel from "./components/create-channel/CreateChannel";
 
 const ContactContainer = () => {
 
-  const { directMessageContact, setDirectMessageContact } = useAppStore()
+  const { directMessageContact, setDirectMessageContact, channels } = useAppStore()
 
 
   useEffect(() => {
@@ -43,6 +45,10 @@ const ContactContainer = () => {
         <div className="my-5">
           <div className="flex items-center justify-between pr-10">
             <Title text="Channel" />
+            <CreateChannel/>
+          </div>
+          <div className="max-h-[38vh] overscroll-y-auto scrollbar-hidden">
+            <Contacts contacts={channels} isChannel={true}/>
           </div>
         </div>
         <ProfileInfo />
