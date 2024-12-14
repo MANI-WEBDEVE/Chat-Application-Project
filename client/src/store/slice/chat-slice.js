@@ -32,9 +32,17 @@ export const createChatSlice = (set, get) => ({
   },
 
   addChannel: (channel) => {
-    const channels = get().channel;
-    set({channels:[channel,...channels]})
+    try {
+      const channels = get().channels || [];
+      console.log('Current channels:', channels);
+      console.log('Adding new channel:', channel);
+      set({channels: [channel, ...channels]});
+      console.log('Updated channels:', get().channels);
+    } catch (error) {
+      console.error('Error adding channel:', error);
+    }
   },
+  
 
 
   closeChat: () =>

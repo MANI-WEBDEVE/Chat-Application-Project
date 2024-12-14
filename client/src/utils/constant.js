@@ -31,5 +31,6 @@ export const UPLOADS_FILES_ROUTES =`${MESSAGES_ROUTE}/upload-file`
 
 // Channel Routes
 
-export const CHANNEL_ROUTE = "api/channel";
+export const CHANNEL_ROUTE = "/api/channel";
 export const CREATE_CHANNEL_ROUTE = `${CHANNEL_ROUTE}/create-channel`;
+export const GET_CHANNELS_ROUTE = `${CHANNEL_ROUTE}/get-channels`

@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import NewDm from "./components/new-dm/NewDm";
 import ProfileInfo from "./components/profileInfo/ProfileInfo";
-import { DM_CONTACT_LIST } from "@/utils/constant";
+import { CHANNEL_ROUTE, DM_CONTACT_LIST, GET_CHANNELS_ROUTE } from "@/utils/constant";
 import apiClient from "@/lib/api-client";
 // import CreateChannel from "@/pages/chat/components/contact-container/components/create-channel/createChannel";
 import { useAppStore } from "@/store";
@@ -10,8 +10,25 @@ import CreateChannel from "./components/create-channel/CreateChannel";
 
 const ContactContainer = () => {
 
-  const { directMessageContact, setDirectMessageContact, channels } = useAppStore()
-
+  const { directMessageContact, setDirectMessageContact, channels, setChannels } = useAppStore()
+  useEffect(() => {
+    const getChannels = async () => {
+      try {
+        const response = await apiClient.get(GET_CHANNELS_ROUTE, {
+          withCredentials: true,
+        });
+        console.log(response.data.channels)
+        if (response.data.channels) {
+          setChannels(response.data.channels);
+        }
+      } catch (error) {
+        console.error('Error fetching channels:', error);
+      }
+    };
+  
+    getChannels();
+  }, [setChannels]);
+  
 
   useEffect(() => {
     const getContact = async () => {
@@ -26,7 +43,6 @@ const ContactContainer = () => {
     };
     getContact();
   }, [setDirectMessageContact]);
-
   return (
     <>
       <div className="relative md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-[#1b1c24] border-r-2 border-[#2f303b] w-full">
@@ -48,7 +64,7 @@ const ContactContainer = () => {
             <CreateChannel/>
           </div>
           <div className="max-h-[38vh] overscroll-y-auto scrollbar-hidden">
-            <Contacts contacts={channels} isChannel={true}/>
+            <Contacts contacts={channels || []} isChannel={true}/>
           </div>
         </div>
         <ProfileInfo />

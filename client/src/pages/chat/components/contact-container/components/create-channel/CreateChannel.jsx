@@ -51,6 +51,7 @@ function CreateChannel() {
   const createChannelHandler = async () => {
     try {
       if (channelName.length > 0 && selectContacts.length > 0) {
+        
         const response = await apiClient.post(
           CREATE_CHANNEL_ROUTE,
           {
@@ -60,6 +61,7 @@ function CreateChannel() {
           { withCredentials: true }
         );
         if(response.status === 201) {
+          console.log(response.data.channel)
           setChannelName("");
           setSelectContacts([]);
           setNewChannelModel(false);  
