@@ -10,7 +10,7 @@ function Contacts({ contacts, isChannel = false }) {
     setSelectedChatData,
     selectedChatType,
     setSelectedChatType,
-    setSelectedChatMessages,
+    setSelectedChatMessage,
   } = useAppStore();
 
   const handleClick = (contact) => {
@@ -18,7 +18,7 @@ function Contacts({ contacts, isChannel = false }) {
     else setSelectedChatType("contact");
     setSelectedChatData(contact);
     if (selectedChatData && selectedChatData._id !== contact._id) {
-      setSelectedChatMessages([]);
+      setSelectedChatMessage([]);
     }
   };
   console.log("Contacts component received:", { contacts, isChannel });
@@ -70,8 +70,8 @@ function Contacts({ contacts, isChannel = false }) {
                     </div>
                   )}
                 </Avatar>
-              {contact.firstName}
               )}
+              {contact.firstName} 
             </div>
             <span>{isChannel && contact.name}</span>
 

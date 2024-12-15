@@ -34,8 +34,18 @@ export const SocketProvider = ({ children }) => {
                 }
             }
 
-            socket.current.on("recieveMessage", handleRecieveMessage)
+            const handleRecieveChannelMessage = (message) => {
+                const { selectedChatType, selectedChatData, addMessage } = useAppStore.getState()
+                if (selectedChatType !== undefined && selectedChatData._id === message.channelId) {
+                    console.log({ message })
+                    addMessage(message)
+                }
 
+            }
+
+
+            socket.current.on("recieveMessage", handleRecieveMessage)
+            socket.current.on("recieve-channel-message", handleRecieveChannelMessage)
             // Clean up the socket connection when the component unmounts or userInfo changes
             return () => {
                 if (socket.current) {
