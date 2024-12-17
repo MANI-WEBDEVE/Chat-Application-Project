@@ -1,6 +1,7 @@
 import User from "../models/AuthModel.js";
 import Channel from "../models/ChannelModel.js";
 
+
 // export const createChannel = async (request, response) => {
 //     try {
 //         const {name, members} = request.body;
@@ -78,5 +79,28 @@ export const createChannel = async (request, response) => {
             error: "Failed to create channel",
             details: error.message 
         });
+    }
+}
+
+
+export const getChannelsMessages = async (request, response) => {
+    try {
+        const {channelId} = request.params;
+        const channel = await Channel.findById(channelId).populate({
+            path: "messages",
+            populate: {
+                path:"sender",
+                select: "email firstName lastName image color _id"
+            }
+
+        })
+        if(!channel) {
+            return response.status(404).json({ error: "Channel not found" });
+        }
+        const messages = channel.messages;
+        return response.status(200).json({ messages });
+
+     } catch (error) {
+        return response.status(500).json({ error: error.message })
     }
 }
